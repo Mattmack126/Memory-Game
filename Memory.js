@@ -9,16 +9,18 @@ var coreGame = {
     $cardName: "",
     clickCount: 0,
     boardSetUp: function(cardSet) {
+        // Populates the window with the divs' and images' 
         $("#boardArea").remove();
         playerScore = 0;
         $("#totalScore").html("Score : " + playerScore);
         $("section").eq(0).append("<section id = boardArea/>")
         for (i = 0; i < cardSet.length; i++) {
-            $("#boardArea").append("<div class = <col-3></col-3> ><img " + "class = " + (cardSet[i].replace(/\s/g, '')) + " src='CardBack.jpg'></div>");
+            $("#boardArea").append("<div class = col-3><img " + "class = " + (cardSet[i].replace(/\s/g, '')) + " src='CardBack.jpg'></div>");
             $("." + cardSet[i].replace(/\s/g, '')).addClass("cardBack")
         }
     },
     cardComparitor: function(card1, card2) {
+        // Compares the two flipped cards, if they are the same it adds the "Matched" class and returns true, if not it returns a false value  
         if (card1 === card2) {
             Match = true;
             $("." + coreGame.compareCard1).addClass("Matched");
@@ -26,28 +28,29 @@ var coreGame = {
             return Match;
         } else {
             Match = false;
-            console.log(Match);
             return Match;
         }
     },
     cardSet: function(cardlist, noOfPairs) {
+        // Sets up the list of cards that will be used for the game 
         var tempCardList = _.sample(cardlist, noOfPairs);
         var finalList = tempCardList.concat(tempCardList);
         return finalList;
     },
     secondCard: function() {
+        // Runs the comparitor function, retrieves a true or false reply
         coreGame.compareCard2 = $cardName;
         Match = coreGame.cardComparitor(coreGame.compareCard1, coreGame.compareCard2);
+        // Removes the Check class from the first card if comparitor returns true it adds 1 to player score 
         if (Match === true) {
             playerScore = playerScore + 1;
-            console.log("true")
             $("." + coreGame.compareCard1).removeClass("Check");
-            console.log(coreGame.compareCard1, coreGame.compareCard2);
             coreGame.compareCard1 = "";
             coreGame.compareCard2 = "";
             $("#totalScore").html("Score : " + playerScore);
+            coreGame.clickCount = 0;
         } else {
-            console.log("false")
+            // removes "Check" class from the first card and flips the two revealed cards over  
             $("." + coreGame.compareCard1).removeClass("Check");
 
             setTimeout(function() {
@@ -62,17 +65,21 @@ var coreGame = {
         }
     },
     onClickSetup: function() {
+        // Sets up the click events on images
         $('#boardArea').on("click", "img", function() {
-            $cardName = $(event.target).attr("class").split(' ')[0];
-            if ((coreGame.compareCard1 === "") && ($(event.target).hasClass("Matched") !== true) && (coreGame.clickCount !== 2)) {
+          $selectedCard = $(event.target);
+            $cardName = $selectedCard.attr("class").split(' ')[0];
+            // flips the first card and adds the class "Check" too it
+            if ((coreGame.compareCard1 === "") && ($selectedCard.hasClass("Matched") !== true) && (coreGame.clickCount !== 2)) {
                 coreGame.compareCard1 = $cardName;
                 coreGame.clickCount = coreGame.clickCount + 1;
-                 $(event.target).attr("src", $cardName + ".png")
-                $(event.target).addClass("Check");
+                $selectedCard.attr("src", $cardName + ".png").addClass("Check");
+                // $selectedCard
                 return
-            } else if (($(event.target).hasClass("Check") !== true) && ($(event.target).hasClass("Matched") !== true) && (coreGame.clickCount !== 2)) {
+                //flips the seconds card and runs the second card function  
+            } else if (($selectedCard.hasClass("Check") !== true) && ($selectedCard.hasClass("Matched") !== true) && (coreGame.clickCount !== 2)) {
                 coreGame.clickCount = coreGame.clickCount + 1;
-                $(event.target).attr("src", $cardName + ".png")
+                $selectedCard.attr("src", $cardName + ".png")
                 coreGame.secondCard();
             } else {
                 return;
@@ -81,7 +88,9 @@ var coreGame = {
     }
 }
 var startGame = function() {
-    var finalSet = coreGame.cardSet(coreGame.cardList, 8);
+    var finalSet = coreGame.cardSet(coreGame.cardList, 3);
     coreGame.boardSetUp(finalSet);
     coreGame.onClickSetup();
 }
+
+startGame();
