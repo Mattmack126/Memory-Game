@@ -56,3 +56,6 @@ img{
   max-width: 100%;
   
 }
+.cardBack{
+z-index: 0;
+}
