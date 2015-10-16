@@ -39,37 +39,43 @@ var coreGame = {
         return (c.flipped ? "PNG-cards-1.3/" + c.faceimage : c.backimage);
     },
     cardclicked: function(id) {
+        
         if (busy || (cards[id].matched) || (coreGame.compareCardsArray.length === 2) || (cards[id].flipped)) {
             return;
         } else if (cards[id].shuffle) {
             cards[id].flipped = !cards[id].flipped;
             var tempArray = coreGame.compareCardsArray;
             busy = true;
-            
+
             coreGame.ShowCards(cards);
             setTimeout(function() {
+              $('#card' + id).addClass("up").addClass("flipped");
                 cards[id].flipped = !cards[id].flipped;
                 if (tempArray.length === 1) {
                     tempArray[0].flipped = !tempArray[0].flipped;
                 }
                 coreGame.ShuffleCardShuffle(cards)
-                coreGame.ShowCards(cards);
+                $(".flipped").addClass("up");
                 coreGame.compareCardsArray = [];
+                setTimeout(function() {
+                    $('.flipped').removeClass("up").removeClass("flipped");
+                    coreGame.ShowCards(cards);
+                }, 100)
                 busy = false;
                 multiPlayer.nextPlayer();
                 coreGame.showScores(multiPlayer);
             }, 1000)
-            
+
             return
         }
-        $('#card' + id).addClass("up");
+        $('#card' + id).addClass("up").addClass("flipped");
         cards[id].flipped = !cards[id].flipped;
         coreGame.compareCardsArray.push(cards[id]);
         if (coreGame.compareCardsArray.length === 2) {
             coreGame.scoreCount(coreGame.comparitor(coreGame.compareCardsArray))
         }
         setTimeout(function() {
-            $('#card' + id).removeClass("up").addClass("flipped");
+            $('#card' + id).removeClass("up");
             coreGame.ShowCards(cards);
         }, 100)
     },
@@ -82,14 +88,14 @@ var coreGame = {
     AddShuffleCards: function(cardset) {
         cardset.push({
             faceimage: 'red_joker.png',
-            backimage: 'CardBack1.jpg',
+            backimage: 'CardBack.jpg',
             flipped: false,
             matched: false,
             shuffle: true
         })
         cardset.push({
             faceimage: 'black_joker.png',
-            backimage: 'CardBack1.jpg',
+            backimage: 'CardBack.jpg',
             flipped: false,
             matched: false,
             shuffle: true
@@ -108,6 +114,7 @@ var coreGame = {
     scoreCount: function(compareResults) {
         switch (compareResults) {
             case true:
+                $('.flipped').removeClass("flipped")
                 multiPlayer.currentPlayer().score++;
                 coreGame.upDateWinner(multiPlayer.currentPlayer().score);
                 coreGame.showScores(multiPlayer);
