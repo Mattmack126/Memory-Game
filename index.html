@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="jquery.js"></script>
+    <script src="underscore.js"></script>
   </head>
   <body>
-    <h1>Memory Game</h1>
-    <h2 id = "totalScore">Score : 0</h2>
-    <section>
-    </section>
-    <script src = "jquery.js"></script>
-    <script src = "underscore.js"></script>
-    <script src = "Memory.js"></script>
-  </body>
+    <h1> Memory Game </h1>
+    <h2 id = "playerScore"></h2>
+    <button id="onePlayer" >One Player</button>
+    <button id="twoPlayer">Two Player</button>
+    <input type="number" id="PairNumber" placeholder="Number of Pairs" value="3">
+    <input type="checkbox" id="Jokers"> Include Shuffle Jokers</label>
+  <section id='boardarea'></section>
+  <script src="test.js"></script>
+</body>
 </html>

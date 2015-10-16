@@ -1,4 +1,6 @@
-
+*{
+  transition: 0.3s ease;
+}
 .col-1 {
 width: 7.5%;
 /*90/1200*/
@@ -61,4 +63,16 @@ img{
 }
 .cardBack{
 
+}
+.card{
+  width: 80px;
+  display: inline-block;
+  padding:10px;
+  
+}
+.up{
+  transform: scaleX(-1);
+}
+.reverse{
+  trasfrom: scaleX(1);
 }
